@@ -1,3 +1,5 @@
+
+
 /**
  * This generic collection class uses a singly-linked data 
  * structure to store store elements. Many operations are
@@ -9,7 +11,7 @@
  *   void removeAll(E)
  *   void duplicateAll(E) 
  * 
- * @author Rick Mercer and Your Name
+ * @author Rick Mercer and Mark Festejo
  */
 public class LinkedList<E extends Comparable<E>> {
   // extends Comparable<E> means the type must be comparable to avoid CT errors
@@ -109,7 +111,9 @@ public class LinkedList<E extends Comparable<E>> {
 
   private E get(Node ref, int startIndex, int stopIndex) {
     // TODO: Complete this method using recursion, no loop allowed.
-    return null;
+    if (startIndex < stopIndex)
+    	return get(ref.next, startIndex+1, stopIndex);
+    return ref.data;
   }
  
   
@@ -118,14 +122,44 @@ public class LinkedList<E extends Comparable<E>> {
   public void removeAll(E el) {
     // This public method requires a call to a private helper method
     // with first as an argument. It must be recursive, no loop allowed.
+	if(this.first != null && el.equals(this.first.data)) {
+		this.first = first.next;
+		n--;
+		removeAll(el);
+	}
+	if (this.first == null)
+		return;
+	removeAll(this.first, el);
+  }
+  
+  private void removeAll(Node ref, E el) {
+	if (ref.next == null)
+		return;
+	if (el.equals(ref.next.data)) {
+		ref.next = ref.next.next;
+		n--;
+	} else 
+		removeAll(ref.next, el);
   }
 
   // Duplicate el next to each occurrence of el in this list.
   public void duplicateAll(E el) {
     // This public method requires a call to a private helper method
     // with first as an argument. It must be recursive, no loop allowed.
+	if (this.first == null)
+		return;
+	duplicateAll(this.first, el);
+	}
+  
+  public void duplicateAll(Node ref, E el) {
+	if (ref == null)
+		return;
+	if (el.equals(ref.data)) {
+		Node tempNode = new Node(el, ref.next);
+		ref.next = tempNode;
+		n++;
+		duplicateAll(ref.next.next, el);
+	} else
+		duplicateAll(ref.next, el);
   }
-
-
-
 }

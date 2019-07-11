@@ -1,3 +1,5 @@
+import org.omg.CORBA.PRIVATE_MEMBER;
+
 /**
  * ObstacleCourse: A type that represents an obstacle course from which to
  * escape. This does not find the shorted path. Because of this, we must always
@@ -76,7 +78,30 @@ public class ObstacleCourse {
     // Do not forget to set the instance variable foundRow and 
     // foundCol in this method when the exit is found.
     //
-    return !false;
+	boolean escaped = false;
+	if (course[row][col] == ' ') {
+		course[row][col] = TRIED;
+		if (onBorder(row, col)) {
+			escaped = true;
+			course[row][col]= PART_OF_PATH; 
+			foundCol = col;
+			foundRow = row;
+		} else {
+			if (!escaped)
+				escaped = findExit(row+1, col);
+			if (!escaped)
+				escaped = findExit(row, col+1);
+			if (!escaped)
+				escaped = findExit(row-1, col);
+			if (!escaped)
+				escaped = findExit(row, col-1);
+		}
+	}
+	return escaped;
+}
+  private boolean onBorder(int row, int col) {
+	  boolean border = false;
+	  border = (row == 0 || row == course.length-1 || col == 0 || col == course[0].length-1);
+	  return border;
   }
-
 }
